@@ -1,6 +1,6 @@
 FROM centos:7 as build
 
-ARG DEVTOOLSET_VERSION=11
+ARG DEVTOOLSET_VERSION=10
 
 WORKDIR /tmp
 # skip installing elrepo-kernel on aarch64
@@ -65,6 +65,7 @@ RUN if [ ! "$(uname -m)" == "aarch64" ]; then \
         vim-enhanced \
         wget \
         zlib-devel \
+        devtoolset-10 \
         && \
     rm -f /etc/yum.repos.d/mono-centos7-stable.repo && \
     yum clean all && \
@@ -588,7 +589,7 @@ RUN echo "Setup sphinx" && \
 # =========================== END OF LAYER: build ==============================
 FROM build as devel
 
-ARG DEVTOOLSET_VERSION=11
+ARG DEVTOOLSET_VERSION=10
 
 # protobuf-compiler and protobuf-devel are used to generate reference data for some tests.
 
@@ -845,7 +846,7 @@ RUN rm -f /root/anaconda-ks.cfg && \
 # =========================== END OF LAYER: devel ==============================
 FROM build as distcc
 
-ARG DEVTOOLSET_VERSION=11
+ARG DEVTOOLSET_VERSION=10
 
 RUN useradd distcc && \
     source /opt/rh/devtoolset-${DEVTOOLSET_VERSION}/enable && \
